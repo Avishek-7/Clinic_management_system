@@ -135,14 +135,14 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded shadow-md"
         >
-          <h1 className="text-xl font-semibold mb-4">
+          <h1 className="text-xl font-semibold text-black mb-4">
             {isRegister ? 'Register' : 'Login'}
           </h1>
 
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -152,7 +152,7 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -161,7 +161,7 @@ export default function LoginPage() {
 
           {isRegister && (
             <select
-              className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
               value={role}
               onChange={(e) =>
                 setRole(e.target.value as 'doctor' | 'receptionist')
@@ -189,7 +189,7 @@ export default function LoginPage() {
             )}
           </button>
 
-          <p className="text-sm mt-3">
+          <p className="text-sm mt-3 text-black">
             {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
             <button
               type="button"
