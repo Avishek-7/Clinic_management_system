@@ -3,26 +3,46 @@
 import useAuthGuard from '@/utils/authGuard'
 import { useState, useEffect } from 'react'
 import { db } from '@/lib/firebase'
-import { addDoc, collection, serverTimestamp, getDocs, updateDoc, doc, DocumentData } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp, getDocs, DocumentData } from 'firebase/firestore'
 import { customAlphabet } from 'nanoid'
+import { useRouter } from 'next/navigation'
+
+const logAction = (action: string, details?: string) => {
+    console.log(`[LOG] ${action}`, details || '')
+}
 
 
 export default function ReceptionistDashboard() {
+    const router = useRouter()
     const loading = useAuthGuard()
     const [name, setName] = useState('')
     const [age, setAge] = useState('')
     const [gender, setGender] = useState('')
     const [patients, setPatients] = useState<DocumentData[]>([])
-    const [charges, setCharges] = useState<{ [id: string]: string }>({})
+    // const [charges, setCharges] = useState<{ [id: string]: string }>({})
     const [message, setMessage] = useState('')
-    const [selectedPatientId, setSelectedPatientId] = useState('')
+    // const [selectedPatientId, setSelectedPatientId] = useState('')
+    const [adding, setAdding] = useState(false)
+    // const [billing, setBilling] = useState(false)
+    const [search, setSearch] = useState('')
 
     // Create a unique token for each patient
     const generateReadableToken = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 8)
+
+    const fetchPatients = async () => {
+        const querySnapshot = await getDocs(collection(db, 'patients'))
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setPatients(data)
+        logAction('Fetched patients', JSON.stringify({ count: data.length }))
+    }
+
+    useEffect(() => {
+        fetchPatients()
+    }, [])
+
     const handleAddPatients = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!name) return  
-
         const generateToken = generateReadableToken()
         await addDoc(collection(db, 'patients'), {
             name,
@@ -31,40 +51,34 @@ export default function ReceptionistDashboard() {
             token: generateToken,
             createdAt: serverTimestamp(),
         })
-
+        logAction('Patient Added', JSON.stringify({ name, token: generateToken }))
         setName('')
         setAge('')
         setGender('')
         setMessage(`Patient ${name} added successfully! Token: ${generateToken}`)
+        setAdding(false)
         fetchPatients()
     }
 
-    const handleChargeChange = (id: string, value: string) => {
-        setCharges(prev => ({ ...prev, [id]: value }))
-    }
+    // const handleChargeChange = (id: string, value: string) => {
+    //     setCharges(prev => ({ ...prev, [id]: value }))
+    // }
 
-    const handleGenerateBill = async (id: string) => {
-        await updateDoc(doc(db, 'patients', id), {
-            billing: {
-                amount: charges[id],
-                generatedAt: new Date(), 
-            },
-        })
+    // const handleGenerateBill = async (id: string) => {
+    //     setBilling(true)
+    //     await updateDoc(doc(db, 'patients', id), {
+    //         billing: {
+    //             amount: charges[id],
+    //             generatedAt: new Date(), 
+    //         },
+    //     })
+    //     logAction('Bill Generated', JSON.stringify({ patientId: id, amount: charges[id] }))
+    //     setMessage('Bill generated successfully.')
+    //     setTimeout(() => setMessage(''), 2000)
+    //     // setBilling(false)
+    //     fetchPatients()
+    // }
 
-        setMessage('Bill generated successfully.')
-        setTimeout(() => setMessage(''), 2000)
-        fetchPatients()
-    }
-
-    const fetchPatients = async () => {
-        const querySnapshot = await getDocs(collection(db, 'patients'))
-        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        setPatients(data)
-    }
-
-    useEffect(() => {
-        fetchPatients()
-    }, [])
 
     if (loading) return <div>Loading...</div>
 
@@ -102,29 +116,53 @@ export default function ReceptionistDashboard() {
                     required
                 />
 
-                <button className="bg-blue-600 text-white px-4 py-2 rounded w-full">
-                    Add Patient
+                <button className="bg-blue-600 text-white px-4 py-2 rounded w-full disabled:opacity-50" disabled={adding}>
+                    {adding ? 'Adding...' : 'Add Patient'}
                 </button>
             </form>
 
-            {/* Billing Section  */}
+            {/* Patient Search  */}
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="Search Patients"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    className="w-full p-2 border rounded text-white"
+                />
+            </div>
+
+            {/* Patients List  */}
+            <ul className="mb-6">
+                {patients.filter(patient => patient.name.toLowerCase().includes(search.toLowerCase())).map(patient => (
+                    <li key={patient.id} className="p-2 border-b border-grey-700 flex justify-between items-center" onClick={() => router.push(`/billing/${patient.id}`)}>
+                        <span>
+                            <strong>{patient.name}</strong> ({patient.token}) - Age: {patient.age}, Gender: {patient.gender}
+                        </span>
+                    </li>
+                ))}
+                {patients.filter(patient => patient.name.toLowerCase().includes(search.toLocaleLowerCase())).length === 0 && (
+                    <li className="p-2 text-grey-400">No patients found.</li>
+                )}
+            </ul>
+
+            {/* Billing Section 
             <h2 className="text-lg font-medium mb-2 mt-8">Billing</h2>
-            {/* <label className="block mb-1 text-white font-medium">Select Patient</label> */}
             <select
                 value={selectedPatientId}
                 onChange={e => setSelectedPatientId(e.target.value)}
                 className="w-full p-2 border rounded bg-white text-black mb-4"
             >
                 <option value="">Select a patient</option>
-                {patients.map(patient => (
+                {patients.filter(patient => patient.name.toLowerCase().includes(search.toLocaleLowerCase())).map(patient => (
                     <option key={patient.id} value={patient.id}>
                         {patient.name} ({patient.token})
                     </option>
                 ))}
-            </select>
+            </select> */}
 
             {/* Billing UI for Selected Patient  */}
-            {selectedPatientId && (() => {
+            {/* {selectedPatientId && (() => {
                 const patient = patients.find(p => p.id === selectedPatientId)
                 if (!patient) return null
 
@@ -146,15 +184,20 @@ export default function ReceptionistDashboard() {
                         <button
                             onClick={() => handleGenerateBill(patient.id)}
                             className="bg-green-600 text-white px-4 py-1 rounded mt-2 w-full"
+                            disabled={billing}
                         >
-                            Generate Bill 
+                            {billing ? 'Generating...' : 'Generate Bill'}
                         </button>
-                        
                     </div>
                 )
-            })()}
+            })()} */}
 
-            {message && <p className="text-green-600 mt-4">{message}</p>}
+            {message && (
+                <div className="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
+                    {message}
+                    <button className="ml-4 text-white" onClick={() => setMessage('')}>x</button>
+                </div>
+            )}
             </div>
         </div>
     )
