@@ -8,10 +8,7 @@ import {
   getDoc,
   getDocs,
   collection,
-  updateDoc,
-  orderBy,
-  query,
-  limit
+  updateDoc
 } from 'firebase/firestore'
 
 type Visit = {
