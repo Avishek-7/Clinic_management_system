@@ -3,13 +3,15 @@
 import useAuthGuard from '@/utils/authGuard'
 import { useState, useEffect } from 'react'
 import { db } from '@/lib/firebase'
-import { addDoc, collection, serverTimestamp, getDocs, DocumentData } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp, getDocs, DocumentData, where, query } from 'firebase/firestore'
 import { customAlphabet } from 'nanoid'
 import { useRouter } from 'next/navigation'
+import { logAction } from '@/utils/logger'
+import UserHeader from '../components/UserHeader'
 
-const logAction = (action: string, details?: string) => {
-    console.log(`[LOG] ${action}`, details || '')
-}
+// const logAction = (action: string, details?: string) => {
+//     console.log(`[LOG] ${action}`, details || '')
+// }
 
 
 export default function ReceptionistDashboard() {
@@ -32,8 +34,8 @@ export default function ReceptionistDashboard() {
     const fetchPatients = async () => {
         const querySnapshot = await getDocs(collection(db, 'patients'))
         const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        setPatients(data)
-        logAction('Fetched patients', JSON.stringify({ count: data.length }))
+        setPatients(data);
+        await logAction('Fetched patients', 'Fetched all patients from Firestore', null, 'receptionist');
     }
 
     useEffect(() => {
@@ -42,22 +44,54 @@ export default function ReceptionistDashboard() {
 
     const handleAddPatients = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!name) return  
-        const generateToken = generateReadableToken()
-        await addDoc(collection(db, 'patients'), {
-            name,
-            age, 
-            gender, 
-            token: generateToken,
+        if (!name || !age || ! gender) return  
+        const token = generateReadableToken()
+        
+        try {
+          const patientsRef = collection(db, 'patients') 
+          
+          // Check if patient already exists 
+          const snapshot = await getDocs(query(patientsRef, where('name', '==', name)))
+          const existingPatient = snapshot.docs[0] 
+          let patientRef
+          
+
+          if (!existingPatient) {
+            // New patient entry 
+            const newDoc = await addDoc(patientsRef, {
+              name,
+              age,
+              gender,
+              createdAt: serverTimestamp(),
+            })
+            patientRef = newDoc 
+          } else {
+            patientRef = existingPatient.ref
+          } 
+
+          console.log('✅ Adding visit to:', patientRef.path)
+          console.log('✅ Token generated:', token)
+
+
+
+          // Add new visit 
+          await addDoc(collection(patientRef, 'visits'), {
+            token,
             createdAt: serverTimestamp(),
-        })
-        logAction('Patient Added', JSON.stringify({ name, token: generateToken }))
-        setName('')
-        setAge('')
-        setGender('')
-        setMessage(`Patient ${name} added successfully! Token: ${generateToken}`)
-        setAdding(false)
-        fetchPatients()
+          })
+
+          await logAction('Visit Added', `Visit created for ${name}`, patientRef.id)
+
+          setName('')
+          setAge('')
+          setGender('')
+          setMessage(`Visit added for ${name}, Token: ${token}`)
+          setAdding(false) 
+          fetchPatients()
+        } catch (error) {
+          console.log('Error adding patient visit:', error)
+        }
+       
     }
 
     // const handleChargeChange = (id: string, value: string) => {
@@ -85,6 +119,7 @@ export default function ReceptionistDashboard() {
     return (
         <div className="min-h-screen bg-black text-white flex items-start justify-center p-6">
             <div className="w-full max-w-2xl">
+            <UserHeader/>
             <h1 className="text-2xl font-semibold mb-4 text-center">Receptionist Dashboard</h1>
 
             {/* Add Patients Form  */}
@@ -121,7 +156,7 @@ export default function ReceptionistDashboard() {
                 </button>
             </form>
 
-            {/* Patient Search  */}
+;            {/* Patient Search  */}
             <div className="mb-4">
                 <input
                     type="text"
@@ -137,7 +172,7 @@ export default function ReceptionistDashboard() {
                 {patients.filter(patient => patient.name.toLowerCase().includes(search.toLowerCase())).map(patient => (
                     <li key={patient.id} className="p-2 border-b border-grey-700 flex justify-between items-center" onClick={() => router.push(`/billing/${patient.id}`)}>
                         <span>
-                            <strong>{patient.name}</strong> ({patient.token}) - Age: {patient.age}, Gender: {patient.gender}
+                            <strong>{patient.name}</strong> - Age: {patient.age}, Gender: {patient.gender}
                         </span>
                     </li>
                 ))}
