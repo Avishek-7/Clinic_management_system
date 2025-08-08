@@ -54,6 +54,28 @@ A comprehensive web-based clinic management system built using Next.js, TypeScri
 - Protected routes via useAuthGuard() hook
 - Secure role-based permissions
 
+## 📸 Screenshots
+
+### Login Interface
+![Login Screen](./screenshots/login-interface.png)
+*Secure authentication with role-based access for doctors and receptionists*
+
+### User Registration
+![User Registration](./screenshots/registration.png)
+*Registration form for new doctors and receptionists with role selection*
+
+### Receptionist Dashboard
+![Receptionist Dashboard](./screenshots/receptionist-dashboard.png)
+*Patient management interface with visit registration and token generation*
+
+### Doctor Dashboard
+![Doctor Dashboard](./screenshots/doctor-dashboard.png)
+*Patient consultation interface with prescription management capabilities*
+
+### Billing System
+![Billing Interface](./screenshots/billing.png)
+*Comprehensive billing system with automated service tracking*
+
 ## 📁 Firestore Database Structure
 
 ```
@@ -196,7 +218,13 @@ src/
 │   ├── authGuard.tsx     → Authentication guard
 │   ├── logger.ts         → Logging utility
 │   └── firebaseFailSafe.ts → Firebase error handling
-└── __tests__/            → Test files
+├── __tests__/            → Test files
+└── screenshots/          → Application screenshots
+    ├── login-interface.png
+    ├── registration.png
+    ├── receptionist-dashboard.png
+    ├── doctor-dashboard.png
+    └── billing.png
 ```
 
 ## 🔧 Development
@@ -293,7 +321,8 @@ This project is licensed under the MIT License.
 ## 👤 Author
 
 **Avishek Kumar**  
-🔗 [github.com/Avishek-7](https://github.com/Avishek-7)
+🔗 [github.com/Avishek-7](https://github.com/Avishek-7)  
+📧 [avishekkumar7550@gmail.com](mailto:avishekkumar7550@gmail.com)
 
 ## 🤝 Contributing
 
@@ -305,7 +334,7 @@ This project is licensed under the MIT License.
 
 ## 📞 Support
 
-For support, email [your-email@example.com] or create an issue in the repository.
+For support, email [avishekkumar7550@gmail.com](mailto:avishekkumar7550@gmail.com) or create an issue in the repository.
 
 ---
 
