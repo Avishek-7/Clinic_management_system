@@ -526,4 +526,4 @@ The system provides a robust, scalable, and secure solution for clinic managemen
 **Author:** Avishek Kumar  
 **GitHub:** https://github.com/Avishek-7  
 **Email:** [avishekkumar7550@gmail.com]  
-**Date:** August 2025 
+**Date:** August 2025
