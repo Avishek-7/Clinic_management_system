@@ -1,6 +1,6 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { getAuth, Auth, GoogleAuthProvider } from 'firebase/auth';
 import { 
   initializeFirestore, 
   memoryLocalCache, 
@@ -167,11 +167,18 @@ const connectionManager = (db: Firestore) => {
 const { app, auth, db, analytics } = initializeFirebase();
 const { enableConnection, disableConnection, resetConnection } = connectionManager(db);
 
+// Initialize Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
+
 export { 
   app, 
   auth, 
   db, 
   analytics,
+  googleProvider,
   enableConnection as handleFirestoreConnection,
   resetConnection as resetFirestoreConnection,
   disableConnection as disableFirestoreNetwork

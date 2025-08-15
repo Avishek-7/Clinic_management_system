@@ -49,10 +49,19 @@ A comprehensive web-based clinic management system built using Next.js, TypeScri
 - Stored with timestamp
 - Professional billing interface
 
-### 🔐 Role-Based Access
-- Authenticated login for doctors and receptionists
-- Protected routes via useAuthGuard() hook
-- Secure role-based permissions
+### 🔐 Authentication & Access Control
+- **Multiple Sign-in Methods:**
+  - Email/password authentication
+  - Google OAuth integration
+  - Automatic role detection for existing users
+- **New User Onboarding:**
+  - Role selection modal for new Google users
+  - Automatic account setup with chosen role
+- **Security Features:**
+  - Protected routes via useAuthGuard() hook
+  - Role-based permissions (Doctor/Receptionist)
+  - Secure session management
+  - Firebase security rules enforcement
 
 ## 📸 Screenshots
 
@@ -156,6 +165,11 @@ npm run test:coverage
 3. **Set up Firebase**
    - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
    - Enable Authentication and Firestore
+   - **Enable Google Authentication:**
+     1. Go to Authentication > Sign-in method
+     2. Enable "Google" provider
+     3. Add your project domains (localhost:3000 for development)
+     4. Configure OAuth consent screen if prompted
    - Add your Firebase config to `/src/lib/firebase.ts`:
 
    ```typescript

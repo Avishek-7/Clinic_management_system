@@ -53,10 +53,12 @@ src/
 ## 🚀 Solution Design
 
 ### 1. User Authentication & Authorization
-- **Firebase Authentication:** Secure user login/registration
+- **Firebase Authentication:** Secure user login/registration with multiple methods
+- **Google OAuth Integration:** One-click sign-in with Google accounts
 - **Role-based Access Control:** Separate interfaces for doctors and receptionists
+- **New User Onboarding:** Role selection modal for first-time Google users
 - **Protected Routes:** useAuthGuard hook for route protection
-- **Session Management:** Automatic session handling
+- **Session Management:** Automatic session handling with secure token management
 
 ### 2. Patient Management System
 - **Patient Registration:** Receptionists can add new patients
@@ -92,7 +94,10 @@ src/
 
 ### Backend Technologies
 - **Firebase Firestore:** NoSQL database with real-time updates
-- **Firebase Authentication:** Secure user management
+- **Firebase Authentication:** Secure user management with multiple providers
+  - Email/password authentication
+  - Google OAuth 2.0 integration
+  - Automatic user role management
 - **Firebase Hosting:** Production deployment
 - **Firebase Security Rules:** Data access control
 
