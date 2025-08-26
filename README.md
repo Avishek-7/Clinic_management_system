@@ -8,7 +8,7 @@ A comprehensive web-based clinic management system built using Next.js, TypeScri
 
 ## � Live Application
 
-**🔗 Production URL:** https://clinicmanagementsystem-kip6qgbic-avishek-7s-projects.vercel.app
+**🔗 Production URL:** https://clinicmanagementsystem-kappa.vercel.app
 
 **✨ Try it now:** Access the live application to experience all features including Google OAuth authentication, role-based dashboards, and complete clinic management functionality.
 
