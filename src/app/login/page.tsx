@@ -7,7 +7,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider,
   User,
 } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'

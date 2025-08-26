@@ -7,7 +7,7 @@ import { doc, getDoc } from 'firebase/firestore'
 
 export default function DebugPage() {
   const [authState, setAuthState] = useState<string>('Loading...')
-  const [userData, setUserData] = useState<any>(null)
+  const [userData, setUserData] = useState<Record<string, unknown> | null>(null)
   const [firebaseError, setFirebaseError] = useState<string>('')
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function DebugPage() {
           if (userSnap.exists()) {
             setUserData({
               uid: user.uid,
-              email: user.email,
+              email: user.email || 'No email',
               ...userSnap.data()
             })
           } else {
@@ -57,9 +57,9 @@ export default function DebugPage() {
               <p><strong>Status:</strong> {authState}</p>
               {userData && (
                 <>
-                  <p><strong>UID:</strong> {userData.uid}</p>
-                  <p><strong>Email:</strong> {userData.email}</p>
-                  <p><strong>Role:</strong> {userData.role || 'Not set'}</p>
+                  <p><strong>UID:</strong> {String(userData.uid)}</p>
+                  <p><strong>Email:</strong> {String(userData.email)}</p>
+                  <p><strong>Role:</strong> {String(userData.role) || 'Not set'}</p>
                   <p><strong>Created At:</strong> {userData.createdAt?.toString() || 'Not set'}</p>
                 </>
               )}

@@ -1,3 +1,5 @@
+import { logAction } from '../logger'
+
 // Mock Firebase
 jest.mock('@/lib/firebase', () => ({
   auth: {
@@ -13,8 +15,6 @@ jest.mock('firebase/firestore', () => ({
   serverTimestamp: jest.fn(() => new Date()),
 }))
 
-import { logAction } from '../logger'
-
 describe('Logger Utility', () => {
   const mockAddDoc = jest.fn()
   const mockCollection = jest.fn()
@@ -23,11 +23,6 @@ describe('Logger Utility', () => {
     jest.clearAllMocks()
     mockAddDoc.mockResolvedValue({ id: 'test-id' })
     mockCollection.mockReturnValue({})
-    
-    // Re-import the mocked modules
-    const firestore = require('firebase/firestore')
-    firestore.addDoc = mockAddDoc
-    firestore.collection = mockCollection
   })
 
   it('should log action successfully', async () => {
