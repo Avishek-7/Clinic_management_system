@@ -1,6 +1,6 @@
 # 📘## 🌐 Live Application
 
-**🔗 Production URL:** https://clinicmanagementsystem-kappa.vercel.app
+**🔗 Production URL:** https://clinicmanagementsystem-9vnvve98s-avishek-7s-projects.vercel.app
 
 **✨ Try it now:** Access the live application to experience all features including Google OAuth authentication, role-based dashboards, and complete clinic management functionality.ic Management System
 
@@ -8,7 +8,7 @@ A comprehensive web-based clinic management system built using Next.js, TypeScri
 
 ## � Live Application
 
-**🔗 Production URL:** https://clinicmanagementsystem-kappa.vercel.app
+**🔗 Production URL:** https://clinicmanagementsystem-9vnvve98s-avishek-7s-projects.vercel.app/login
 
 **✨ Try it now:** Access the live application to experience all features including Google OAuth authentication, role-based dashboards, and complete clinic management functionality.
 
@@ -167,7 +167,7 @@ npm run test:coverage
 ## 🚀 Quick Start (Live Application)
 
 ### 🌐 Access the Live Application
-1. **Visit the live application:** https://clinicmanagementsystem-kappa.vercel.app
+1. **Visit the live application:** https://clinicmanagementsystem-9vnvve98s-avishek-7s-projects.vercel.app/login
 2. **Sign in using:**
    - **Google Account** (Recommended): Click "Sign in with Google" and select your role
    - **Email/Password**: Use the traditional login form
@@ -371,7 +371,7 @@ This project is licensed under the MIT License.
 **Avishek Kumar**  
 🔗 [github.com/Avishek-7](https://github.com/Avishek-7)  
 📧 [avishekkumar7550@gmail.com](mailto:avishekkumar7550@gmail.com)  
-🌐 **Live Project:** [Clinic Management System](https://clinicmanagementsystem-kappa.vercel.app)
+🌐 **Live Project:** [Clinic Management System](https://clinicmanagementsystem-9vnvve98s-avishek-7s-projects.vercel.app/login)
 
 ## 🤝 Contributing
 
